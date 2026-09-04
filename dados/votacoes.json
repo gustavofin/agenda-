@@ -1,0 +1,74 @@
+[
+  {
+    "apelido": "PEC da Blindagem",
+    "idProposicao": 2270800,
+    "idVotacao": "2270800-165",
+    "data": "2025-09-16",
+    "descricao": "Suprimido o texto. Sim: 296; Não: 174; Total: 470.",
+    "aprovacao": null
+  },
+  {
+    "apelido": "PL da Anistia (urgência)",
+    "idProposicao": 2358548,
+    "idVotacao": "2358548-29",
+    "data": "2025-09-17",
+    "descricao": "Realizar o encaminhamento do PL-2162/2023 à CCJC (tramitação simultânea), em razão da aprovação de requerimento de urgência.",
+    "aprovacao": 1
+  },
+  {
+    "apelido": "PL da Dosimetria (votação final)",
+    "idProposicao": 2358548,
+    "idVotacao": "2358548-98",
+    "data": "2025-12-09",
+    "descricao": "Aprovada a Redação Final assinada pelo relator, Dep. Paulinho da Força (SOLIDARIEDADE/SP). Sim: 235; Não: 25; Abstenção: 3; Total: 263.",
+    "aprovacao": 1
+  },
+  {
+    "apelido": "PL Antifacção",
+    "idProposicao": 2579832,
+    "idVotacao": "2579832-106",
+    "data": "2025-11-18",
+    "descricao": "Aprovada a Redação Final assinada pelo relator, Dep. Guilherme Derrite (PP/SP).",
+    "aprovacao": 1
+  },
+  {
+    "apelido": "Marco Temporal",
+    "idProposicao": 345311,
+    "idVotacao": "345311-281",
+    "data": "2023-05-30",
+    "descricao": "Aprovada a Redação Final assinada pelo relator, Dep. Arthur Oliveira Maia (UNIÃO-BA).",
+    "aprovacao": 1
+  },
+  {
+    "apelido": "Reforma Tributária (PEC 45)",
+    "idProposicao": 2196833,
+    "idVotacao": "2196833-397",
+    "data": "2023-07-07",
+    "descricao": "Aprovada a Redação Final assinada pelo Relator, Dep. Aguinaldo Ribeiro (PP-PB).",
+    "aprovacao": 1
+  },
+  {
+    "apelido": "Isenção do IR até R$5 mil",
+    "idProposicao": 2487436,
+    "idVotacao": "2487436-172",
+    "data": "2025-10-01",
+    "descricao": "Aprovada a Redação Final assinada pelo relator, Dep. Arthur Lira (PP/AL).",
+    "aprovacao": 1
+  },
+  {
+    "apelido": "PL das Fake News (urgência)",
+    "idProposicao": 2256735,
+    "idVotacao": "2310837-8",
+    "data": "2023-04-25",
+    "descricao": "Aprovado o Requerimento de Urgência (Art. 154 do RICD). Sim: 238; não: 192; total: 430.",
+    "aprovacao": 1
+  },
+  {
+    "apelido": "PL da Devastação / Licenciamento Ambiental",
+    "idProposicao": 257161,
+    "idVotacao": "257161-483",
+    "data": "2025-07-16",
+    "descricao": "Aprovada a Redação Final assinada pelo Relator, Dep. Zé Vitor (PL-MG). Sim: 231; Não: 87; Total: 318.",
+    "aprovacao": 1
+  }
+]
