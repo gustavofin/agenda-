@@ -36,6 +36,7 @@ OUT_DIR.mkdir(exist_ok=True)
 
 HEADERS = {"Accept": "application/json"}
 SLEEP_BETWEEN_CALLS = 0.4  # educado com o servidor público
+JANELA_DIAS = 3  # quantos dias ao redor da data_alvo contam como "mesma data"
 
 # ---------------------------------------------------------------------------
 # 1) CONFIGURAÇÃO DOS 9 PROJETOS
@@ -150,42 +151,63 @@ def list_votacoes(id_proposicao: int) -> list[dict]:
     return data.get("dados", [])
 
 
-def pick_votacao(votacoes: list[dict], data_alvo: str, palavra_chave: str) -> dict | None:
-    """Escolhe a votação mais provável: mesma data + (se houver) palavra-chave na descrição."""
-    alvo = datetime.strptime(data_alvo, "%Y-%m-%d").date()
-    candidatas = []
-    for v in votacoes:
-        data_votacao = v.get("data")
-        if not data_votacao:
-            continue
-        d = datetime.strptime(data_votacao, "%Y-%m-%d").date()
-        if d == alvo:
-            candidatas.append(v)
-
-    if not candidatas:
-        # fallback: pega a mais próxima da data alvo
-        votacoes_com_data = [v for v in votacoes if v.get("data")]
-        if not votacoes_com_data:
-            return None
-        candidatas = sorted(
-            votacoes_com_data,
-            key=lambda v: abs((datetime.strptime(v["data"], "%Y-%m-%d").date() - alvo).days),
-        )
-        return candidatas[0]
-
-    if palavra_chave:
-        for v in candidatas:
-            descricao = (v.get("descricao") or "").lower()
-            if palavra_chave.lower() in descricao:
-                return v
-
-    return candidatas[0]
-
-
 def get_votos(id_votacao: str) -> list[dict]:
     """Baixa o voto individual de cada deputado numa votação nominal."""
     data = get_json(f"{BASE_URL}/votacoes/{id_votacao}/votos")
     return data.get("dados", [])
+
+
+def escolher_votacao_com_votos(
+    votacoes: list[dict], data_alvo: str, palavra_chave: str
+) -> tuple[dict | None, list[dict]]:
+    """Escolhe a votação certa entre as candidatas de uma proposição.
+
+    Nem toda "votação" listada pela API tem voto nominal individual —
+    aprovação de redação final, encaminhamentos processuais e votações
+    simbólicas/de lideranças aparecem no endpoint /votacoes mas devolvem
+    lista vazia em /votos. Bater só com data + palavra-chave na descrição
+    (como fazíamos antes) pode escolher uma dessas votações "vazias" quando
+    há mais de uma votação na mesma data.
+
+    Por isso, além de ordenar as candidatas por proximidade de data e por
+    palavra-chave, esta função efetivamente baixa os votos de cada
+    candidata (nessa ordem de prioridade) e fica com a primeira que tiver
+    voto individual registrado.
+    """
+    votacoes_com_data = [v for v in votacoes if v.get("data")]
+    if not votacoes_com_data:
+        return None, []
+
+    alvo = datetime.strptime(data_alvo, "%Y-%m-%d").date()
+
+    def dias_de_distancia(v):
+        return abs((datetime.strptime(v["data"], "%Y-%m-%d").date() - alvo).days)
+
+    candidatas = sorted(votacoes_com_data, key=dias_de_distancia)
+    proximas = [v for v in candidatas if dias_de_distancia(v) <= JANELA_DIAS]
+    restantes = [v for v in candidatas if v not in proximas]
+
+    if palavra_chave:
+        com_palavra_chave = [
+            v for v in proximas if palavra_chave.lower() in (v.get("descricao") or "").lower()
+        ]
+        sem_palavra_chave = [v for v in proximas if v not in com_palavra_chave]
+        ordem_tentativa = com_palavra_chave + sem_palavra_chave + restantes
+    else:
+        ordem_tentativa = proximas + restantes
+
+    tentativas = []
+    for v in ordem_tentativa:
+        votos = get_votos(v["id"])
+        tentativas.append((v, votos))
+        if votos:
+            if tentativas[0][0] is not v:
+                print(f"  [AVISO] Pulei {len(tentativas) - 1} votação(ões) sem voto individual antes de achar esta.")
+            return v, votos
+
+    # nenhuma candidata teve voto individual — devolve a melhor tentativa
+    # (a de maior prioridade) mesmo sem votos, para não travar o restante do script
+    return tentativas[0] if tentativas else (candidatas[0], [])
 
 
 def get_todos_deputados() -> list[dict]:
@@ -229,7 +251,9 @@ def main():
             print(f"  [AVISO] Nenhuma votação registrada para essa proposição ainda.")
             continue
 
-        votacao_escolhida = pick_votacao(votacoes, projeto["data_alvo"], projeto["palavra_chave"])
+        votacao_escolhida, votos = escolher_votacao_com_votos(
+            votacoes, projeto["data_alvo"], projeto["palavra_chave"]
+        )
         if votacao_escolhida is None:
             print(f"  [AVISO] Não encontrei votação próxima de {projeto['data_alvo']}.")
             continue
@@ -238,9 +262,8 @@ def main():
         print(f"  Votação encontrada: {id_votacao} em {votacao_escolhida.get('data')}")
         print(f"  Descrição: {votacao_escolhida.get('descricao')}")
 
-        votos = get_votos(id_votacao)
         if not votos:
-            print(f"  [AVISO] Votação sem registro individual (pode ter sido simbólica/em bloco).")
+            print(f"  [AVISO] Nenhuma candidata próxima dessa data teve voto individual registrado (pode ter sido só simbólica/em bloco).")
 
         resultado_votacoes.append(
             {
