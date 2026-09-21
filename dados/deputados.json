@@ -2354,6 +2354,17 @@
     "email": "dep.gilbertonascimento@camara.leg.br"
   },
   {
+    "id": 74581,
+    "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/74581",
+    "nome": "Gilmar Machado",
+    "siglaPartido": "PT",
+    "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/36844",
+    "siglaUf": "MG",
+    "idLegislatura": 57,
+    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/74581.jpg",
+    "email": "dep.gilmarmachado@camara.leg.br"
+  },
+  {
     "id": 220529,
     "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/220529",
     "nome": "Gilson Daniel",
@@ -2418,17 +2429,6 @@
     "idLegislatura": 57,
     "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/204419.jpg",
     "email": "dep.glaustindafokus@camara.leg.br"
-  },
-  {
-    "id": 236284,
-    "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/236284",
-    "nome": "Glaycon Franco",
-    "siglaPartido": "PSDB",
-    "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/36835",
-    "siglaUf": "MG",
-    "idLegislatura": 57,
-    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/236284.jpg",
-    "email": "dep.glayconfranco@camara.leg.br"
   },
   {
     "id": 107283,
