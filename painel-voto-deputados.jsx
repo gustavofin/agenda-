@@ -1,76 +1,85 @@
 import React, { useMemo, useState } from "react";
+import candidatosData from "./dados/candidatos_2026.json";
+import deputadosData from "./dados/deputados.json";
+import votacoesData from "./dados/votacoes.json";
+import votosData from "./dados/votos.json";
 
-// ---------------------------------------------------------------------------
-// DADOS DE DEMONSTRAÇÃO — 100% FICTÍCIOS.
-// Nenhum nome, partido ou voto abaixo corresponde a um deputado real.
-// Isso existe só para mostrar como a interface funciona. Antes de publicar,
-// troque por dados reais vindos da API de Dados Abertos da Câmara.
-// ---------------------------------------------------------------------------
+const VOTACOES = votacoesData.map((votacao) => ({
+  id: votacao.apelido,
+  titulo: votacao.apelido,
+  resumo: votacao.descricao || "Votação nominal registrada pela Câmara dos Deputados.",
+  data: votacao.data,
+}));
 
-const VOTACOES = [
-  {
-    id: "blindagem",
-    titulo: "PEC da Blindagem",
-    resumo:
-      "Condiciona a abertura de processo criminal contra deputados e senadores no STF à autorização prévia da Câmara ou do Senado.",
-    data: "16/09/2025 (demonstração)",
-  },
-  {
-    id: "anistia",
-    titulo: "Urgência do PL da Anistia",
-    resumo:
-      "Regime de urgência para o projeto que trata de anistia a condenados por atos golpistas de 8 de janeiro de 2023.",
-    data: "17/09/2025 (demonstração)",
-  },
-  {
-    id: "marco_temporal",
-    titulo: "Marco Temporal",
-    resumo:
-      "Estabelece que só podem ser demarcadas terras indígenas ocupadas por povos originários na data da promulgação da Constituição, em 1988.",
-    data: "30/05/2023 (demonstração)",
-  },
-  {
-    id: "reforma_tributaria",
-    titulo: "Reforma Tributária (PEC 45)",
-    resumo:
-      "Unifica tributos sobre consumo em um novo sistema de IVA dual (CBS e IBS), substituindo PIS, Cofins, IPI, ICMS e ISS.",
-    data: "07/07/2023 (demonstração)",
-  },
-  {
-    id: "arcabouco_fiscal",
-    titulo: "Novo Arcabouço Fiscal",
-    resumo:
-      "Substitui o teto de gastos por regras de crescimento da despesa pública atreladas à variação da receita.",
-    data: "23/05/2023 (demonstração)",
-  },
-];
+const VOTO = {
+  SIM: "Sim",
+  NAO: "Não",
+  ABST: "Abstenção",
+  AUSENTE: "Ausente",
+  OBSTRUCAO: "Obstrução",
+  ARTIGO_17: "Artigo 17",
+  REGISTRADO: "Registrado",
+  SEM_MANDATO: "Sem mandato atual",
+};
 
-const VOTO = { SIM: "Sim", NAO: "Não", ABST: "Absteve", AUSENTE: "Ausente" };
+function normalizarVoto(tipoVoto) {
+  const tipo = (tipoVoto || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  if (tipo === "sim") return "SIM";
+  if (tipo === "nao") return "NAO";
+  if (tipo.includes("abst")) return "ABST";
+  if (tipo.includes("obstrucao")) return "OBSTRUCAO";
+  if (tipo.includes("artigo 17")) return "ARTIGO_17";
+  return "REGISTRADO";
+}
 
-const DEPUTADOS = [
-  { nome: "Ana Beatriz Moreira", partido: "PT", uf: "SP", votos: { blindagem: "NAO", anistia: "NAO", marco_temporal: "NAO", reforma_tributaria: "SIM", arcabouco_fiscal: "SIM" } },
-  { nome: "Carlos Eduardo Faria", partido: "PL", uf: "MG", votos: { blindagem: "SIM", anistia: "SIM", marco_temporal: "SIM", reforma_tributaria: "NAO", arcabouco_fiscal: "NAO" } },
-  { nome: "Débora Santos Lima", partido: "PSOL", uf: "RJ", votos: { blindagem: "NAO", anistia: "NAO", marco_temporal: "NAO", reforma_tributaria: "SIM", arcabouco_fiscal: "NAO" } },
-  { nome: "Eduardo Nogueira", partido: "UNIÃO", uf: "BA", votos: { blindagem: "SIM", anistia: "AUSENTE", marco_temporal: "SIM", reforma_tributaria: "SIM", arcabouco_fiscal: "SIM" } },
-  { nome: "Fernanda Ribeiro Alves", partido: "MDB", uf: "PR", votos: { blindagem: "ABST", anistia: "NAO", marco_temporal: "SIM", reforma_tributaria: "SIM", arcabouco_fiscal: "SIM" } },
-  { nome: "Gustavo Henrique Pires", partido: "PP", uf: "RS", votos: { blindagem: "SIM", anistia: "SIM", marco_temporal: "SIM", reforma_tributaria: "NAO", arcabouco_fiscal: "NAO" } },
-  { nome: "Helena Cristina Souza", partido: "PSD", uf: "CE", votos: { blindagem: "NAO", anistia: "AUSENTE", marco_temporal: "NAO", reforma_tributaria: "SIM", arcabouco_fiscal: "SIM" } },
-  { nome: "Igor Almeida Castro", partido: "REPUBLICANOS", uf: "PE", votos: { blindagem: "SIM", anistia: "SIM", marco_temporal: "SIM", reforma_tributaria: "SIM", arcabouco_fiscal: "NAO" } },
-  { nome: "Juliana Martins Reis", partido: "PDT", uf: "SC", votos: { blindagem: "NAO", anistia: "NAO", marco_temporal: "AUSENTE", reforma_tributaria: "SIM", arcabouco_fiscal: "SIM" } },
-  { nome: "Leonardo Costa Duarte", partido: "PODEMOS", uf: "GO", votos: { blindagem: "SIM", anistia: "ABST", marco_temporal: "SIM", reforma_tributaria: "NAO", arcabouco_fiscal: "SIM" } },
-  { nome: "Mariana Oliveira Prado", partido: "PSB", uf: "PA", votos: { blindagem: "NAO", anistia: "NAO", marco_temporal: "NAO", reforma_tributaria: "SIM", arcabouco_fiscal: "NAO" } },
-  { nome: "Nelson Rodrigues Vaz", partido: "PSDB", uf: "SP", votos: { blindagem: "SIM", anistia: "AUSENTE", marco_temporal: "SIM", reforma_tributaria: "SIM", arcabouco_fiscal: "SIM" } },
-];
+function montarDeputados() {
+  const votosPorProjeto = Object.fromEntries(
+    Object.entries(votosData).map(([apelido, votos]) => [
+      apelido,
+      new Map(votos.map((registro) => [registro.deputado_?.id, normalizarVoto(registro.tipoVoto)])),
+    ]),
+  );
+
+  const deputadoPorId = new Map(deputadosData.map((deputado) => [deputado.id, deputado]));
+
+  return candidatosData.map((candidato) => {
+    const deputado = candidato.idDeputado ? deputadoPorId.get(candidato.idDeputado) : null;
+    return {
+      id: candidato.idDeputado || candidato.NR_CPF_CANDIDATO || candidato.NR_CANDIDATO,
+      nome: candidato.NM_URNA_CANDIDATO || candidato.NM_CANDIDATO,
+      nomeCompleto: candidato.NM_CANDIDATO,
+      partido: candidato.SG_PARTIDO,
+      uf: candidato.SG_UF,
+      numero: candidato.NR_CANDIDATO,
+      urlFoto: deputado?.urlFoto,
+      temMandatoAtual: candidato.temMandatoAtual,
+      votos: Object.fromEntries(
+        VOTACOES.map((votacao) => [
+          votacao.id,
+          candidato.temMandatoAtual
+            ? votosPorProjeto[votacao.id]?.get(candidato.idDeputado) || "AUSENTE"
+            : "SEM_MANDATO",
+        ]),
+      ),
+    };
+  });
+}
+
+const DEPUTADOS = montarDeputados();
 
 const VOTE_STYLE = {
   SIM: { bg: "#EAF2EC", fg: "#2F6B4F", border: "#2F6B4F" },
   NAO: { bg: "#F6EAE7", fg: "#A23B2E", border: "#A23B2E" },
   ABST: { bg: "#F5EEDD", fg: "#96731B", border: "#96731B" },
   AUSENTE: { bg: "#EFEEEA", fg: "#7A7A73", border: "#7A7A73" },
+  OBSTRUCAO: { bg: "#E9EEF2", fg: "#426278", border: "#426278" },
+  ARTIGO_17: { bg: "#E9EEF2", fg: "#426278", border: "#426278" },
+  REGISTRADO: { bg: "#E9EEF2", fg: "#426278", border: "#426278" },
+  SEM_MANDATO: { bg: "#F5F3EE", fg: "#7A7A73", border: "#C9C4B4" },
 };
 
 function VoteBadge({ code }) {
-  const s = VOTE_STYLE[code];
+  const s = VOTE_STYLE[code] || VOTE_STYLE.REGISTRADO;
   return (
     <span
       style={{
@@ -85,7 +94,7 @@ function VoteBadge({ code }) {
         display: "inline-block",
       }}
     >
-      {VOTO[code]}
+      {VOTO[code] || "Registrado"}
     </span>
   );
 }
@@ -94,43 +103,55 @@ export default function App() {
   const [busca, setBusca] = useState("");
   const [uf, setUf] = useState("TODOS");
   const [partido, setPartido] = useState("TODOS");
+  const [mostrarTodos, setMostrarTodos] = useState(false);
   const [selecionado, setSelecionado] = useState(null);
+  const [pagina, setPagina] = useState(1);
+  const ITENS_POR_PAGINA = 40;
 
   const ufs = useMemo(() => ["TODOS", ...new Set(DEPUTADOS.map((d) => d.uf))].sort(), []);
   const partidos = useMemo(() => ["TODOS", ...new Set(DEPUTADOS.map((d) => d.partido))].sort(), []);
 
   const filtrados = DEPUTADOS.filter((d) => {
-    const passaBusca = d.nome.toLowerCase().includes(busca.toLowerCase());
+    const termo = busca.toLowerCase();
+    const passaBusca = [d.nome, d.nomeCompleto, d.partido, d.uf, d.numero].some((valor) =>
+      String(valor || "").toLowerCase().includes(termo),
+    );
     const passaUf = uf === "TODOS" || d.uf === uf;
     const passaPartido = partido === "TODOS" || d.partido === partido;
-    return passaBusca && passaUf && passaPartido;
+    const passaMandato = mostrarTodos || d.temMandatoAtual;
+    return passaBusca && passaUf && passaPartido && passaMandato;
   });
+  const totalPaginas = Math.max(1, Math.ceil(filtrados.length / ITENS_POR_PAGINA));
+  const paginaAtual = Math.min(pagina, totalPaginas);
+  const deputadosDaPagina = filtrados.slice(
+    (paginaAtual - 1) * ITENS_POR_PAGINA,
+    paginaAtual * ITENS_POR_PAGINA,
+  );
 
   return (
     <div style={{ background: "#F5F3EE", minHeight: "100%", fontFamily: "Georgia, 'Times New Roman', serif", color: "#1B2733" }}>
-      {/* Faixa de aviso de demonstração */}
       <div style={{ background: "#1B2733", color: "#F5F3EE", padding: "8px 20px", fontFamily: "Helvetica, Arial, sans-serif", fontSize: 12.5, textAlign: "center" }}>
-        Protótipo de demonstração — todos os nomes, partidos e votos abaixo são fictícios.
+        Dados Abertos da Câmara dos Deputados · 57ª Legislatura
       </div>
 
       {/* Masthead */}
       <header style={{ borderBottom: "3px double #1B2733", padding: "28px 20px 18px", maxWidth: 1040, margin: "0 auto" }}>
         <div style={{ fontFamily: "Helvetica, Arial, sans-serif", fontSize: 12, letterSpacing: 1, color: "#7A7A73", marginBottom: 6 }}>
-          Câmara dos Deputados · 57ª Legislatura · Eleições 2026
+          Câmara dos Deputados · 57ª Legislatura
         </div>
         <h1 style={{ fontSize: 34, margin: 0, fontWeight: 700, lineHeight: 1.15 }}>
           Como seu deputado votou
         </h1>
         <p style={{ fontFamily: "Helvetica, Arial, sans-serif", fontSize: 14.5, color: "#3D4753", maxWidth: 620, marginTop: 10, lineHeight: 1.5 }}>
-          Registro factual dos votos de deputados federais em candidatura à reeleição, em cinco votações
-          de grande repercussão desta legislatura. Sem opinião, sem qualificação — só o placar.
+          Registro factual dos votos de deputados federais em nove votações de grande repercussão.
+          Sem opinião, sem qualificação — só o placar.
         </p>
       </header>
 
       {/* Legenda das votações */}
       <section style={{ maxWidth: 1040, margin: "0 auto", padding: "20px 20px 0" }}>
         <div style={{ fontFamily: "Helvetica, Arial, sans-serif", fontSize: 12.5, color: "#7A7A73", marginBottom: 10 }}>
-          As cinco votações
+          As nove votações
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 14 }}>
           {VOTACOES.map((v) => (
@@ -152,23 +173,27 @@ export default function App() {
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
           <input
             value={busca}
-            onChange={(e) => setBusca(e.target.value)}
-            placeholder="Buscar deputado pelo nome..."
+            onChange={(e) => { setBusca(e.target.value); setPagina(1); }}
+            placeholder="Buscar nome, partido, UF ou número..."
             style={{ flex: "1 1 240px", padding: "9px 12px", border: "1px solid #C9C4B4", borderRadius: 3, fontSize: 13.5, background: "#fff" }}
           />
-          <select value={uf} onChange={(e) => setUf(e.target.value)} style={{ padding: "9px 10px", border: "1px solid #C9C4B4", borderRadius: 3, fontSize: 13.5, background: "#fff" }}>
+          <select value={uf} onChange={(e) => { setUf(e.target.value); setPagina(1); }} style={{ padding: "9px 10px", border: "1px solid #C9C4B4", borderRadius: 3, fontSize: 13.5, background: "#fff" }}>
             {ufs.map((u) => (
               <option key={u} value={u}>{u === "TODOS" ? "Todos os estados" : u}</option>
             ))}
           </select>
-          <select value={partido} onChange={(e) => setPartido(e.target.value)} style={{ padding: "9px 10px", border: "1px solid #C9C4B4", borderRadius: 3, fontSize: 13.5, background: "#fff" }}>
+          <select value={partido} onChange={(e) => { setPartido(e.target.value); setPagina(1); }} style={{ padding: "9px 10px", border: "1px solid #C9C4B4", borderRadius: 3, fontSize: 13.5, background: "#fff" }}>
             {partidos.map((p) => (
               <option key={p} value={p}>{p === "TODOS" ? "Todos os partidos" : p}</option>
             ))}
           </select>
+          <select value={mostrarTodos ? "TODOS" : "MANDATO"} onChange={(e) => { setMostrarTodos(e.target.value === "TODOS"); setPagina(1); }} style={{ padding: "9px 10px", border: "1px solid #C9C4B4", borderRadius: 3, fontSize: 13.5, background: "#fff" }}>
+            <option value="MANDATO">Só deputados atuais</option>
+            <option value="TODOS">Mostrar todos os candidatos</option>
+          </select>
         </div>
         <div style={{ fontSize: 12, color: "#7A7A73", marginTop: 8 }}>
-          {filtrados.length} de {DEPUTADOS.length} deputados (fictícios) exibidos
+          {filtrados.length} de {DEPUTADOS.length} candidatos exibidos
         </div>
       </section>
 
@@ -178,7 +203,7 @@ export default function App() {
           <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: "Helvetica, Arial, sans-serif", fontSize: 13 }}>
             <thead>
               <tr style={{ borderBottom: "2px solid #1B2733" }}>
-                <th style={{ textAlign: "left", padding: "10px 14px", whiteSpace: "nowrap" }}>Deputado</th>
+                <th style={{ textAlign: "left", padding: "10px 14px", whiteSpace: "nowrap" }}>Candidato</th>
                 {VOTACOES.map((v) => (
                   <th key={v.id} style={{ textAlign: "left", padding: "10px 12px", fontWeight: 600, minWidth: 130 }}>
                     {v.titulo}
@@ -187,9 +212,9 @@ export default function App() {
               </tr>
             </thead>
             <tbody>
-              {filtrados.map((d, i) => (
+              {deputadosDaPagina.map((d, i) => (
                 <tr
-                  key={d.nome}
+                  key={`${d.id}-${d.numero}`}
                   onClick={() => setSelecionado(d)}
                   style={{
                     borderBottom: "1px solid #EFEBDF",
@@ -198,8 +223,12 @@ export default function App() {
                   }}
                 >
                   <td style={{ padding: "10px 14px", fontWeight: 600 }}>
-                    {d.nome}
-                    <div style={{ fontWeight: 400, color: "#7A7A73", fontSize: 12 }}>{d.partido}-{d.uf}</div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
+                      {d.urlFoto && <img src={d.urlFoto} alt="" style={{ width: 32, height: 32, objectFit: "cover", borderRadius: 3 }} />}
+                      <span>{d.nome}</span>
+                    </div>
+                    <div style={{ fontWeight: 400, color: "#7A7A73", fontSize: 12 }}>{d.partido}-{d.uf} · nº {d.numero}</div>
+                    {!d.temMandatoAtual && <div style={{ fontWeight: 400, color: "#96731B", fontSize: 11, marginTop: 2 }}>Candidato · sem mandato atual</div>}
                   </td>
                   {VOTACOES.map((v) => (
                     <td key={v.id} style={{ padding: "10px 12px" }}>
@@ -211,13 +240,36 @@ export default function App() {
               {filtrados.length === 0 && (
                 <tr>
                   <td colSpan={VOTACOES.length + 1} style={{ padding: 24, textAlign: "center", color: "#7A7A73" }}>
-                    Nenhum deputado encontrado com esses filtros.
+                    Nenhum candidato encontrado com esses filtros.
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
         </div>
+        {totalPaginas > 1 && (
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 12, fontFamily: "Helvetica, Arial, sans-serif", fontSize: 12.5, color: "#7A7A73" }}>
+            <span>Página {paginaAtual} de {totalPaginas}</span>
+            <div style={{ display: "flex", gap: 8 }}>
+              <button
+                type="button"
+                onClick={() => setPagina((valor) => Math.max(1, valor - 1))}
+                disabled={paginaAtual === 1}
+                style={{ padding: "7px 12px", border: "1px solid #C9C4B4", background: "#fff", borderRadius: 3, cursor: paginaAtual === 1 ? "default" : "pointer" }}
+              >
+                Anterior
+              </button>
+              <button
+                type="button"
+                onClick={() => setPagina((valor) => Math.min(totalPaginas, valor + 1))}
+                disabled={paginaAtual === totalPaginas}
+                style={{ padding: "7px 12px", border: "1px solid #C9C4B4", background: "#fff", borderRadius: 3, cursor: paginaAtual === totalPaginas ? "default" : "pointer" }}
+              >
+                Próxima
+              </button>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* Painel de detalhe */}
@@ -230,8 +282,14 @@ export default function App() {
             onClick={(e) => e.stopPropagation()}
             style={{ background: "#F5F3EE", maxWidth: 460, width: "100%", borderRadius: 6, padding: 26, fontFamily: "Helvetica, Arial, sans-serif" }}
           >
+            {selecionado.urlFoto && (
+              <img src={selecionado.urlFoto} alt={`Foto de ${selecionado.nome}`} style={{ width: 72, height: 72, objectFit: "cover", borderRadius: 3, marginBottom: 12 }} />
+            )}
             <div style={{ fontFamily: "Georgia, serif", fontSize: 20, fontWeight: 700 }}>{selecionado.nome}</div>
-            <div style={{ color: "#7A7A73", fontSize: 13, marginTop: 2, marginBottom: 16 }}>{selecionado.partido}-{selecionado.uf} · dado fictício</div>
+            <div style={{ color: "#7A7A73", fontSize: 13, marginTop: 2, marginBottom: 4 }}>{selecionado.partido}-{selecionado.uf} · nº {selecionado.numero}</div>
+            <div style={{ color: selecionado.temMandatoAtual ? "#2F6B4F" : "#96731B", fontSize: 12, marginBottom: 16 }}>
+              {selecionado.temMandatoAtual ? "Deputado atual" : "Candidato · sem mandato atual"}
+            </div>
             {VOTACOES.map((v) => (
               <div key={v.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderBottom: "1px solid #E1DDCF" }}>
                 <span style={{ fontSize: 13 }}>{v.titulo}</span>
@@ -249,7 +307,7 @@ export default function App() {
       )}
 
       <footer style={{ borderTop: "1px solid #E1DDCF", padding: "18px 20px", maxWidth: 1040, margin: "0 auto", fontFamily: "Helvetica, Arial, sans-serif", fontSize: 11.5, color: "#96876B" }}>
-        Fonte pretendida para a versão real: Dados Abertos da Câmara dos Deputados (dadosabertos.camara.leg.br) e Repositório de Dados Eleitorais do TSE. Dados nesta tela são apenas ilustrativos.
+        Fonte: Dados Abertos da Câmara dos Deputados (dadosabertos.camara.leg.br). A ausência indica que não há voto individual registrado para aquela votação.
       </footer>
     </div>
   );
