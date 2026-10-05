@@ -4037,6 +4037,17 @@
     "email": "dep.murillogouvea@camara.leg.br"
   },
   {
+    "id": 220584,
+    "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/220584",
+    "nome": "Murilo Galdino",
+    "siglaPartido": "REPUBLICANOS",
+    "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/37908",
+    "siglaUf": "PB",
+    "idLegislatura": 57,
+    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/220584.jpg",
+    "email": "dep.murilogaldino@camara.leg.br"
+  },
+  {
     "id": 204453,
     "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/204453",
     "nome": "Natália Bonavides",
@@ -4640,17 +4651,6 @@
     "idLegislatura": 57,
     "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/74084.jpg",
     "email": "dep.raimundosantos@camara.leg.br"
-  },
-  {
-    "id": 115200,
-    "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/115200",
-    "nome": "Raniery Paulino",
-    "siglaPartido": "REPUBLICANOS",
-    "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/37908",
-    "siglaUf": "PB",
-    "idLegislatura": 57,
-    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/115200.jpg",
-    "email": "dep.ranierypaulino@camara.leg.br"
   },
   {
     "id": 74161,
@@ -5379,17 +5379,6 @@
     "email": "dep.tuliogadelha@camara.leg.br"
   },
   {
-    "id": 236423,
-    "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/236423",
-    "nome": "Valdir Trindade",
-    "siglaPartido": "REPUBLICANOS",
-    "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/37908",
-    "siglaUf": "PB",
-    "idLegislatura": 57,
-    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/236423.jpg",
-    "email": "dep.valdirtrindade@camara.leg.br"
-  },
-  {
     "id": 160610,
     "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/160610",
     "nome": "Valmir Assunção",
@@ -5520,6 +5509,17 @@
     "idLegislatura": 57,
     "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/224333.jpg",
     "email": "dep.welter@camara.leg.br"
+  },
+  {
+    "id": 74044,
+    "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/74044",
+    "nome": "Wilson Santiago",
+    "siglaPartido": "REPUBLICANOS",
+    "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/37908",
+    "siglaUf": "PB",
+    "idLegislatura": 57,
+    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/74044.jpg",
+    "email": "dep.wilsonsantiago@camara.leg.br"
   },
   {
     "id": 220564,
