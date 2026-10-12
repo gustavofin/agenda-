@@ -4136,17 +4136,6 @@
     "email": "dep.niltotatto@camara.leg.br"
   },
   {
-    "id": 194260,
-    "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/194260",
-    "nome": "Nivaldo Albuquerque",
-    "siglaPartido": "UNIÃO",
-    "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/38009",
-    "siglaUf": "AL",
-    "idLegislatura": 57,
-    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/194260.jpg",
-    "email": "dep.nivaldoalbuquerque@camara.leg.br"
-  },
-  {
     "id": 204498,
     "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/204498",
     "nome": "Olival Marques",
@@ -4189,6 +4178,17 @@
     "idLegislatura": 57,
     "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/204441.jpg",
     "email": "dep.otonidepaula@camara.leg.br"
+  },
+  {
+    "id": 220706,
+    "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/220706",
+    "nome": "Padovani",
+    "siglaPartido": "PP",
+    "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/37903",
+    "siglaUf": "PR",
+    "idLegislatura": 57,
+    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/220706.jpg",
+    "email": "dep.padovani@camara.leg.br"
   },
   {
     "id": 160556,
@@ -4266,6 +4266,17 @@
     "idLegislatura": 57,
     "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/74160.jpg",
     "email": "dep.patrusananias@camara.leg.br"
+  },
+  {
+    "id": 171617,
+    "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/171617",
+    "nome": "Paulão",
+    "siglaPartido": "PT",
+    "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/36844",
+    "siglaUf": "AL",
+    "idLegislatura": 57,
+    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/171617.jpg",
+    "email": "dep.paulao@camara.leg.br"
   },
   {
     "id": 141518,
@@ -5049,17 +5060,6 @@
     "email": "dep.sandroalex@camara.leg.br"
   },
   {
-    "id": 236518,
-    "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/236518",
-    "nome": "Santin Roveda",
-    "siglaPartido": "UNIÃO",
-    "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/38009",
-    "siglaUf": "PR",
-    "idLegislatura": 57,
-    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/236518.jpg",
-    "email": "dep.santinroveda@camara.leg.br"
-  },
-  {
     "id": 204387,
     "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/204387",
     "nome": "Sargento Fahur",
@@ -5535,13 +5535,13 @@
   {
     "id": 220660,
     "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/220660",
-    "nome": "Yury do Paredão",
+    "nome": "Yury Bruno",
     "siglaPartido": "MDB",
     "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/36899",
     "siglaUf": "CE",
     "idLegislatura": 57,
     "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/220660.jpg",
-    "email": "dep.yurydoparedao@camara.leg.br"
+    "email": "dep.yurybruno@camara.leg.br"
   },
   {
     "id": 230768,
