@@ -198,6 +198,17 @@
     "email": "dep.alexmanente@camara.leg.br"
   },
   {
+    "id": 204571,
+    "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/204571",
+    "nome": "Alex Santana",
+    "siglaPartido": "REPUBLICANOS",
+    "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/37908",
+    "siglaUf": "BA",
+    "idLegislatura": 57,
+    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/204571.jpg",
+    "email": "dep.alexsantana@camara.leg.br"
+  },
+  {
     "id": 220542,
     "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/220542",
     "nome": "Alexandre Guimarães",
@@ -2332,6 +2343,17 @@
     "email": "dep.gervasiomaia@camara.leg.br"
   },
   {
+    "id": 74383,
+    "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/74383",
+    "nome": "Giacobo",
+    "siglaPartido": "PSD",
+    "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/36834",
+    "siglaUf": "PR",
+    "idLegislatura": 57,
+    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/74383.jpg",
+    "email": "dep.giacobo@camara.leg.br"
+  },
+  {
     "id": 204491,
     "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/204491",
     "nome": "Gilberto Abramo",
@@ -2671,17 +2693,6 @@
     "idLegislatura": 57,
     "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/204436.jpg",
     "email": "dep.isnaldobulhoesjr@camara.leg.br"
-  },
-  {
-    "id": 225846,
-    "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/225846",
-    "nome": "Itamar Paim",
-    "siglaPartido": "PL",
-    "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/37906",
-    "siglaUf": "PR",
-    "idLegislatura": 57,
-    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/225846.jpg",
-    "email": "dep.itamarpaim@camara.leg.br"
   },
   {
     "id": 220696,
@@ -3562,17 +3573,6 @@
     "idLegislatura": 57,
     "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/133810.jpg",
     "email": "dep.marcelomoraes@camara.leg.br"
-  },
-  {
-    "id": 204558,
-    "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/204558",
-    "nome": "Marcelo Nilo",
-    "siglaPartido": "REPUBLICANOS",
-    "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/37908",
-    "siglaUf": "BA",
-    "idLegislatura": 57,
-    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/204558.jpg",
-    "email": "dep.marcelonilo@camara.leg.br"
   },
   {
     "id": 160161,
